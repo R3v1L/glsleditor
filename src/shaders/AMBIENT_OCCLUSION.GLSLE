@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<glsleproject name="Ambient Occlusion" version="0.1">
+<!-- Project comments and information -->
+<comments>Oclusión lumínica ambiental</comments>
+
+<!-- Project environment -->
+<environment></environment>
+
+<!-- Vertex data section -->
+<vertexdata>attribute vec4 ambient_occlusion; 
+varying float ambient_occlusion_term;
+
+void main(void)
+{
+	gl_Position = ftransform();
+	ambient_occlusion_term = ambient_occlusion.w;
+}
+</vertexdata>
+
+<!-- Fragment data section -->
+<fragmentdata>varying float ambient_occlusion_term;
+
+void main (void)
+{
+	vec4 vAmbient = vec4(0.9, 0.9, 0.9, 1.0);
+	vAmbient.rgb *= ambient_occlusion_term;
+	gl_FragColor = vAmbient; 
+}
+</fragmentdata>
+
+<!-- Textures section -->
+<textures></textures>
+</glsleproject>

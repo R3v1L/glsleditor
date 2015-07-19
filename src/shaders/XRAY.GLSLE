@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<glsleproject name="XRay Effect" version="0.1">
+<!-- Project comments and information -->
+<comments>Efecto de Rayos X</comments>
+
+<!-- Project environment -->
+<environment></environment>
+
+<!-- Vertex data section -->
+<vertexdata>// Application to vertex shader
+varying vec3 N;
+varying vec3 I;
+varying vec4 Cs;
+
+void main()
+{
+	vec4 P = gl_ModelViewMatrix * gl_Vertex;
+	
+	I  = P.xyz - vec3 (0);
+	
+	N  = gl_NormalMatrix * gl_Normal;
+	
+	Cs = gl_Color;
+	
+	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;	
+} 
+</vertexdata>
+
+<!-- Fragment data section -->
+<fragmentdata>// vertex to fragment shader io
+varying vec3 N;
+varying vec3 I;
+varying vec4 Cs;
+
+// globals
+uniform float edgefalloff=1;
+
+// entry point
+void main()
+{
+    float opac = dot(normalize(-N), normalize(-I));
+    opac = abs(opac);
+    opac = 1.0-pow(opac, edgefalloff);
+    
+    gl_FragColor =  opac * Cs;
+    gl_FragColor.a = opac;
+}
+</fragmentdata>
+
+<!-- Textures section -->
+<textures></textures>
+</glsleproject>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<glsleproject name="Cell Shader" version="0.1">
+<!-- Project comments and information -->
+<comments>Shader que implementa el modelo de dibujado Cell Shading</comments>
+
+<!-- Project environment -->
+<environment></environment>
+
+<!-- Vertex data section -->
+<vertexdata>// Vertex program
+varying vec3 normal;
+void main() {
+        normal = gl_NormalMatrix * gl_Normal;
+        gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+}</vertexdata>
+
+<!-- Fragment data section -->
+<fragmentdata>// Fragment program
+varying vec3 normal;
+void main() {
+        float intensity;
+	float steps=5;
+        vec4 color;
+        vec3 n = normalize(normal);
+        vec3 l = normalize(gl_LightSource[0].position).xyz;
+ 
+        // quantize to specified steps
+        intensity = (floor(dot(l, n) * steps) + 1.0)/steps;
+	if (intensity&lt;=0) {
+		intensity=1/steps;
+	}
+        color = vec4(intensity*0.5, intensity*0.5, intensity*1.0,1.0);
+ 
+        gl_FragColor = color;
+}</fragmentdata>
+
+<!-- Textures section -->
+<textures></textures>
+</glsleproject>

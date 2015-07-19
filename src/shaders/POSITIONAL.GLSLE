@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<glsleproject name="Cell Shader" version="0.1">
+<!-- Project comments and information -->
+<comments>Shader que implementa el modelo de dibujado Cell Shading</comments>
+
+<!-- Project environment -->
+<environment></environment>
+
+<!-- Vertex data section -->
+<vertexdata>// Vertex program
+varying vec3 pos;
+void main() {
+    pos = gl_Vertex.xyz;
+    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+}
+	</vertexdata>
+
+<!-- Fragment data section -->
+<fragmentdata>// Fragment program
+varying vec3 pos;
+void main() {
+        gl_FragColor = vec4(pos,1);
+}
+</fragmentdata>
+
+<!-- Textures section -->
+<textures></textures>
+</glsleproject>

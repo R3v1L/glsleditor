@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<glsleproject name="Cell Shader 2" version="0.1">
+<!-- Project comments and information -->
+<comments>Shader que implementa el modelo de dibujado Cell Shading</comments>
+
+<!-- Project environment -->
+<environment></environment>
+
+<!-- Vertex data section -->
+<vertexdata>// Vertex program
+varying vec3 normal;
+varying vec3 I;
+
+void main() {
+	vec4 P = gl_ModelViewMatrix * gl_Vertex;	
+	I  = P.xyz - vec3 (0);
+        normal = gl_NormalMatrix * gl_Normal;
+        gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+}</vertexdata>
+
+<!-- Fragment data section -->
+<fragmentdata>// Fragment program
+varying vec3 normal;
+varying vec3 I;
+varying vec4 Cs;
+
+void main() {
+        float intensity;
+	float steps=2.0;
+	bordertreshold=0.75;
+        vec4 color;
+	vec4 objectcolor=vec4(1.0,1.0,1.0,1.0);
+	vec4 bordercolor=vec4(0.0,0.0,0.0,1.0);
+        vec3 n = normalize(normal);
+        vec3 l = normalize(gl_LightSource[0].position).xyz;
+ 
+        // Cuantificar los pasos de iluminacion al maximo de colores especificados
+        intensity = (floor(dot(l, n) * steps) + 1.0)/steps;
+	if (intensity&lt;=0.0) {
+		intensity=1.0/steps;
+	}
+        color = vec4(intensity*objectcolor);
+	color.a=1.0;
+
+	// Pintamos los bordes del objeto
+	float border = dot(normalize(-normal), normalize(-I));
+	border = abs(border);
+	border = 1.0-border;
+	if (border&gt;bordertreshold) {
+		// Devolvemos el color del borde
+		gl_FragColor =  bordercolor;
+	} else {
+		// Devolvemos el color del fragmento
+		gl_FragColor = color;
+	}
+
+}</fragmentdata>
+
+<!-- Textures section -->
+<textures></textures>
+</glsleproject>
